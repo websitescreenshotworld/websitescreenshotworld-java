@@ -284,7 +284,9 @@
             <configuration>
               <publishingServerId>central</publishingServerId>
               <autoPublish>true</autoPublish>
-              <waitUntil>published</waitUntil>
+              <!-- Wait only until Central has validated the upload; it then publishes on its own. Waiting for
+                   "published" timed out the 0.1.0 job after 30 minutes although the release went out. -->
+              <waitUntil>validated</waitUntil>
             </configuration>
           </plugin>
         </plugins>

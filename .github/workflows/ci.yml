@@ -50,8 +50,8 @@ jobs:
           cache: maven
           # Writes a settings.xml whose "central" server reads the credentials from the environment.
           server-id: central
-          server-username: MAVEN_CENTRAL_USERNAME
-          server-password: MAVEN_CENTRAL_PASSWORD
+          server-username-env-var: MAVEN_CENTRAL_USERNAME
+          server-password-env-var: MAVEN_CENTRAL_PASSWORD
       - name: Check the tag matches the version
         run: |
           version="$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)"
