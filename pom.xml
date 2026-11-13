@@ -83,7 +83,7 @@
         <filtering>true</filtering>
       </resource>
       <resource>
-        <directory>..</directory>
+        <directory>${project.basedir}</directory>
         <includes>
           <include>LICENSE</include>
         </includes>

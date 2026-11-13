@@ -93,7 +93,11 @@ class ClientTest {
 
     String userAgent = server.requests().get(0).get("headers").get("user-agent").asText();
     assertEquals(
-        "websitescreenshotworld-java/0.1.0 (Java " + System.getProperty("java.version") + ")",
+        "websitescreenshotworld-java/"
+            + Version.NUMBER
+            + " (Java "
+            + System.getProperty("java.version")
+            + ")",
         userAgent);
   }
 
