@@ -12,14 +12,14 @@ Maven:
 <dependency>
   <groupId>com.websitescreenshotworld</groupId>
   <artifactId>websitescreenshotworld-java</artifactId>
-  <version>0.1.0</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```kotlin
-implementation("com.websitescreenshotworld:websitescreenshotworld-java:0.1.0")
+implementation("com.websitescreenshotworld:websitescreenshotworld-java:0.4.0")
 ```
 
 The library needs Java 11 or later and depends only on `jackson-databind`.
@@ -257,6 +257,30 @@ client.instantSnap().capture(
 ```
 
 A call that runs out of time throws `ConnectionException`.
+
+## Render links
+
+A render link is a signed URL that is itself a screenshot, for an `<img>` tag, an email or a social preview.
+`RenderLink.build` makes one locally - nothing is sent and no client is needed - from the key's render secret
+(shown on the dashboard's API Keys page once render links are on for the key) and its 12-character prefix:
+
+```java
+String src =
+    RenderLink.build(
+        RenderLinkOptions.builder(
+                System.getenv("WSW_RENDER_SECRET"), "0123456789ab", "https://example.com")
+            .format(CaptureFormat.WEBP)
+            .width(1280)
+            .height(720)
+            .thumbWidth(400)
+            .ttlSeconds(86_400) // serve the same capture for a day
+            .build());
+// <img src="..." alt="example.com">
+```
+
+A view of the link that is not cached makes one capture from your plan; cached views are free. Keep the render
+secret on your server: anyone who has it can make links that use your captures. Render links are on the Pro,
+Business and Business Plus plans.
 
 ## Webhooks
 
