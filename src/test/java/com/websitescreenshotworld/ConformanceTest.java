@@ -107,6 +107,9 @@ class ConformanceTest {
             : RequestOptions.none();
     InstantSnap instantSnap = client.instantSnap();
     String method = call.get("method").asText();
+    if (call.get("product").asText().equals("auto_schedule") && method.equals("account")) {
+      return Json.toTree(client.autoSchedule().account(requestOptions));
+    }
     switch (method) {
       case "capture":
         return Json.toTree(instantSnap.capture(options(call), requestOptions));
@@ -133,6 +136,8 @@ class ConformanceTest {
         return Json.toTree(instantSnap.defaults());
       case "catalog":
         return Json.toTree(instantSnap.catalog());
+      case "account":
+        return Json.toTree(instantSnap.account(requestOptions));
       case "trigger_now":
         return Json.toTree(
             client

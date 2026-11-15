@@ -47,18 +47,54 @@ public final class AutoSchedule {
   public TriggerResult triggerNow(UUID webPageId, RequestOptions requestOptions) {
     Objects.requireNonNull(webPageId, "webPageId");
     Objects.requireNonNull(requestOptions, "requestOptions");
+    String key = requireKey();
+    URI uri = URI.create(baseUrl + "/auto-schedule/v1/web-pages/" + webPageId + "/trigger-now");
+    ApiRequest request =
+        ApiRequest.post(uri, null, timeout(requestOptions))
+            .header("X-Api-Key", key)
+            .header("Accept", "application/json");
+    return transport.sendForJson(request, TriggerResult.class);
+  }
+
+  /**
+   * Returns whose key this is: its name and prefix, its product and the member who created it. It
+   * costs no capture, so it is also a cheap way to check a key works.
+   *
+   * @return the key's account; it never includes the key
+   * @throws IllegalStateException if the client has no Auto Schedule API key
+   */
+  public Account account() {
+    return account(RequestOptions.none());
+  }
+
+  /**
+   * Returns whose key this is: its name and prefix, its product and the member who created it. It
+   * costs no capture, so it is also a cheap way to check a key works.
+   *
+   * @param requestOptions settings for this call
+   * @return the key's account; it never includes the key
+   * @throws IllegalStateException if the client has no Auto Schedule API key
+   */
+  public Account account(RequestOptions requestOptions) {
+    Objects.requireNonNull(requestOptions, "requestOptions");
+    String key = requireKey();
+    ApiRequest request =
+        ApiRequest.get(URI.create(baseUrl + "/auto-schedule/v1/account"), timeout(requestOptions))
+            .header("X-Api-Key", key)
+            .header("Accept", "application/json");
+    return transport.sendForJson(request, Account.class);
+  }
+
+  private String requireKey() {
     if (apiKey == null) {
       throw new IllegalStateException(
           "No Auto Schedule API key: set WSW_AUTO_SCHEDULE_API_KEY or call "
               + "WebsiteScreenshotWorld.builder().autoScheduleApiKey(...)");
     }
-    URI uri = URI.create(baseUrl + "/auto-schedule/v1/web-pages/" + webPageId + "/trigger-now");
-    Duration callTimeout =
-        requestOptions.timeout() != null ? requestOptions.timeout() : this.timeout;
-    ApiRequest request =
-        ApiRequest.post(uri, null, callTimeout)
-            .header("X-Api-Key", apiKey)
-            .header("Accept", "application/json");
-    return transport.sendForJson(request, TriggerResult.class);
+    return apiKey;
+  }
+
+  private Duration timeout(RequestOptions requestOptions) {
+    return requestOptions.timeout() != null ? requestOptions.timeout() : this.timeout;
   }
 }

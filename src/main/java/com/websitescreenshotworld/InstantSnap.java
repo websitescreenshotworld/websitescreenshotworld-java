@@ -412,6 +412,33 @@ public final class InstantSnap {
     return transport.sendForJson(request, Catalog.class);
   }
 
+  /**
+   * Returns whose key this is: its name and prefix, its product and the member who created it. It
+   * costs no capture, so it is also a cheap way to check a key works.
+   *
+   * @return the key's account; it never includes the key
+   * @throws IllegalStateException if the client has no Instant Snap API key
+   */
+  public Account account() {
+    return account(RequestOptions.none());
+  }
+
+  /**
+   * Returns whose key this is: its name and prefix, its product and the member who created it. It
+   * costs no capture, so it is also a cheap way to check a key works.
+   *
+   * @param requestOptions settings for this call
+   * @return the key's account; it never includes the key
+   * @throws IllegalStateException if the client has no Instant Snap API key
+   */
+  public Account account(RequestOptions requestOptions) {
+    ApiRequest request =
+        ApiRequest.get(uri("/instant-snap/v1/account"), timeout(requestOptions, timeout))
+            .header("X-Api-Key", requireKey())
+            .header("Accept", "application/json");
+    return transport.sendForJson(request, Account.class);
+  }
+
   private static boolean unfinished(CaptureStatus status) {
     return CaptureStatus.QUEUED.equals(status)
         || CaptureStatus.RUNNING.equals(status)

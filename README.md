@@ -65,6 +65,16 @@ if (result.status() == TriggerStatus.ALREADY_PENDING) {
 
 `triggerNow` is safe to repeat: while a capture is pending, another call starts nothing new.
 
+### Whose key is this
+
+`account()` answers whose key the client holds, without the key itself and without spending a capture
+(`client.autoSchedule().account()` does the same for the Auto Schedule key):
+
+```java
+Account account = client.instantSnap().account();
+System.out.println(account.email() + " (" + account.keyName() + ", " + account.keyPrefix() + ")");
+```
+
 ## Saving a file
 
 `captureFile` answers with the file itself (up to 64 MB). The body is streamed from the connection rather
