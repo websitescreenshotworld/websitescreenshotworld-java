@@ -11,6 +11,7 @@ import java.util.UUID;
  */
 public final class Capture {
   private UUID id;
+  private String url;
   private CaptureStatus status;
   private ResponseType responseType;
   private MediaCategory mediaCategory;
@@ -47,6 +48,16 @@ public final class Capture {
    */
   public UUID id() {
     return id;
+  }
+
+  /**
+   * Returns the page the capture was asked for. {@link #finalUrl()} says where the browser ended
+   * up.
+   *
+   * @return the URL; {@code null} only from a server older than API 1.3.0
+   */
+  public String url() {
+    return url;
   }
 
   /**

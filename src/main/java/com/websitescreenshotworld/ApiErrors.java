@@ -38,8 +38,14 @@ final class ApiErrors {
         "quota_exhausted",
         "feature_not_available",
         "no_trigger_allowance",
-        "forbidden");
-    register(NotFoundException::new, "capture_not_found", "web_page_not_found", "not_found");
+        "forbidden",
+        "webhook_endpoint_limit_reached");
+    register(
+        NotFoundException::new,
+        "capture_not_found",
+        "web_page_not_found",
+        "not_found",
+        "webhook_endpoint_not_found");
     register(RateLimitException::new, "rate_limited", "queue_full");
     register(
         CaptureException::new,
